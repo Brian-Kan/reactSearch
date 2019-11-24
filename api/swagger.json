@@ -1,0 +1,83 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ROSS Mini",
+    "description": "Mock ROSS API",
+    "version": "1.0.0"
+  },
+  "definitions": {
+    "Query": {
+      "properties": {
+        "type": { "type": "string", "enum": ["keyword", "citation"] },
+        "text": { "type": "string" }
+      }
+    },
+    "Document": {
+      "properties": {
+        "id": { "type": "string" },
+        "citation": { "type": "string" },
+        "courtName": { "type": "string" },
+        "datePublished": { "type": "string" },
+        "type": { "type": "string", "enum": ["published", "unpublished"] },
+        "passages": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "paths": {
+    "/search": {
+      "post": {
+        "summary": "Search for documents based on keywords",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "search",
+            "schema": { "$ref": "#/definitions/Query" }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "documents": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/Document" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "get": {
+        "summary": "Fetch a specific document",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "identifier for document",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "document": {
+                  "items": { "$ref": "#/definitions/Document" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
